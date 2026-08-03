@@ -82,13 +82,25 @@ if active_df is not None:
                     # Instantiating current fast inference model
                     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
 
-                    system_prompt = (
-                       "You are a forensic telecommunications data auditor. Your task is to analyze a set of messy, "
-                    "historical spectrum log entries spanning decades and reconstruct a clean chronological asset trail. "
-                    "Account for historical corporate mergers, brand changes, and re-farming activities. "
-                    "Format your response beautifully using clean markdown bullet points. For each milestone year, "
-                    "use an emoji indicator: 🟢 for Allocation/Acquisition, 🟡 for Updates/Renewals, and 🔵 for Relocation/Refarming. "
-                    "Output ONLY the timeline reconstruction. Do not invent any facts outside the provided text log."
+                 system_prompt = (
+                        "You are an expert global telecommunications forensic data auditor at GSMA.\n\n"
+                        "Your task is to take the provided filtered spectrum registry logs and synthesize them into a clean, "
+                        "highly professional corporate asset lineage timeline. Group your analysis strictly into generational technology eras "
+                        "(e.g., '### 2G Spectrum', '### 3G Spectrum', '### 4G Spectrum', '### 5G Spectrum').\n\n"
+                        "CRITICAL TIMELINE & SEGMENTATION RULES:\n"
+                        "1. Within each technology era header, you MUST group the exact same physical spectrum asset entries together so their history is contiguous. Trace the direct evolution chain of an operator group sequentially (e.g., keep BPL Mobile and Loop Mobile consecutively; keep Hutchison, Vodafone, and Vi consecutively) before moving to a completely different operator's block.\n"
+                        "2. Every single event MUST be printed on its own brand new line. Never combine multiple records horizontally.\n"
+                        "3. Format every single entry as a proper markdown bullet point using an asterisk (*) followed by a space, matching this exact template layout:\n"
+                        "   * [Status Icon] [Start Year]-[End Year]: [Current Operating Brand Name] ([Original Legacy Code]) - [Tech Layer Description] ([Total MHz] MHz, [FDD/TDD Mode]) - Cost: [Clean Price String or 'Not Disclosed'] - Region: [Circle Name]\n\n"
+                        "EXPLICIT STATUS ICONS:\n"
+                        "   🟢 for Initial Allocation\n"
+                        "   🟡 for Renewals\n"
+                        "   🔵 for Reallocations/Harmonization/Refarming\n"
+                        "   🔴 for Expired/Operational Cease\n\n"
+                        "DATA CLEANING DIRECTIONS:\n"
+                        "* Strip exact date strings down to clean 4-digit years (e.g., convert '2001-09-10' to '2001').\n"
+                        "* Clean up structural database gaps: If a cost or value is missing or reads 'NaN', write it cleanly as '$10 million', 'Rs 50 Crore', or 'Not Disclosed'. Never output the raw programming text 'NaN'.\n"
+                        "* Output ONLY the clean markdown headers and the perfectly separated line-by-line bullet arrays. Avoid all conversational intro/outro commentary or markdown backtick wrappers."
                     )
 
                     response = llm.invoke(f"{system_prompt}\n\nRegistry Data Target Context:\n{raw_log}")
