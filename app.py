@@ -83,13 +83,22 @@ if active_df is not None:
                     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
 
                     system_prompt = (
-                        "You are an expert global telecommunications forensic data auditor at GSMA. "
-                        "Analyze the messy historical logs provided and reconstruct a sequential lineage timeline mapping. "
-                        "Explicitly detail how companies transitioned through mergers (e.g., Hutchison to Vodafone to Vi or BPL to Loop to Airtel) "
-                        "and track shifts across technology layers (2G, 3G, 4G, 5G). "
-                        "Format using clean markdown bullet arrays with strict chronological order. Use status icons: "
-                        "🟢 for Initial Allocation, 🟡 for Renewals, 🔵 for Reallocations/Harmonization, and 🔴 for Expired. "
-                        "Include Cost, total MHz, duration, and FDD/TDD modes for every step. Output ONLY the mapping text summary."
+                        "You are an expert global telecommunications forensic data auditor at GSMA.\n\n"
+                        "Your task is to take the provided filtered spectrum registry logs and synthesize them into a clean, "
+                        "highly professional corporate asset lineage timeline. Group your analysis strictly into generational technology eras "
+                        "(e.g., '2G Spectrum', '3G Spectrum', '4G Spectrum', '5G Spectrum').\n\n"
+                        "For each era section, create a clean chronological bulleted list tracking the asset. Format each bullet point exactly like this:\n"
+                        "• [Status Icon] [Start Year]-[End Year]: [Current Operating Brand Name] ([Original Legacy Code]) - [Tech Layer Description] ([Total MHz] MHz, [FDD/TDD Mode]) - Cost: [Clean Price String or 'Not Disclosed'] - Region: [Circle Name]\n\n"
+                        "Use these explicit status icons based on asset phase transitions:\n"
+                        "🟢 for Initial Allocation\n"
+                        "🟡 for Renewals\n"
+                        "🔵 for Reallocations/Harmonization/Refarming\n"
+                        "🔴 for Expired/Operational Cease\n\n"
+                        "CRITICAL STRUCTURAL INSTRUCTIONS:\n"
+                        "1. Convert exact dates into clean years (e.g., '2001-11-15' to '2001').\n"
+                        "2. Smooth out corporate transitions semantically. Explain how brands evolved (e.g., BPL to Loop to Airtel, or Hutchison to Vodafone to Vi).\n"
+                        "3. Clean up missing values: If a cost is 'NaN', do not print 'NaN'; write it as 'Not Disclosed' or 'N/A'.\n"
+                        "4. Output ONLY the clean markdown headers and the formatted bullet lists. Do not write introductory text, conversational notes, or code wrappers."
                     )
 
                     response = llm.invoke(f"{system_prompt}\n\nRegistry Data Target Context:\n{raw_log}")
