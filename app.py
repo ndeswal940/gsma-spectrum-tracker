@@ -77,28 +77,19 @@ if active_df is not None:
             # Format rows to pure string dump to fit inside LLM context window efficiently
             raw_log = filtered_df.to_string(index=False)
 
-           with st.spinner("AI Engine executing entity resolution calculations..."):
+            with st.spinner("AI Engine executing entity resolution calculations..."):
                 try:
                     # Instantiating current fast inference model
                     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
 
                     system_prompt = (
-                        "You are an expert global telecommunications forensic data auditor at GSMA.\n\n"
-                        "Your task is to take the provided filtered spectrum registry logs and synthesize them into a clean, "
-                        "highly professional corporate asset lineage timeline. Group your analysis strictly into generational technology eras "
-                        "(e.g., '### 2G Spectrum', '### 3G Spectrum', '### 4G Spectrum', '### 5G Spectrum').\n\n"
-                        "CRITICAL STRUCTURAL INSTRUCTIONS:\n"
-                        "1. Every single event MUST be printed on its own brand new line. Never pack multiple events into a single line or paragraph.\n"
-                        "2. Format each entry as a proper markdown bullet point exactly like this:\n"
-                        "   * [Status Icon] [Start Year]-[End Year]: [Current Operating Brand Name] ([Original Legacy Code]) - [Tech Layer Description] ([Total MHz] MHz, [FDD/TDD Mode]) - Cost: [Clean Price String or 'Not Disclosed'] - Region: [Circle Name]\n"
-                        "3. Use these explicit status icons based on asset phase transitions:\n"
-                        "   🟢 for Initial Allocation\n"
-                        "   🟡 for Renewals\n"
-                        "   🔵 for Reallocations/Harmonization/Refarming\n"
-                        "   🔴 for Expired/Operational Cease\n\n"
-                        "4. Convert exact timestamps into clean years (e.g., '2001-09-10' becomes '2001').\n"
-                        "5. If a value or cost is 'NaN' or missing, write it cleanly as 'Not Disclosed' or 'N/A'. Do not print raw 'NaN'.\n"
-                        "6. Output ONLY the clean markdown section headers and the line-by-line formatted bullet lists. Do not wrap code blocks or include extra greeting/intro text."
+                        "You are an expert global telecommunications forensic data auditor at GSMA. "
+                        "Analyze the messy historical logs provided and reconstruct a sequential lineage timeline mapping. "
+                        "Explicitly detail how companies transitioned through mergers (e.g., Hutchison to Vodafone to Vi or BPL to Loop to Airtel) "
+                        "and track shifts across technology layers (2G, 3G, 4G, 5G). "
+                        "Format using clean markdown bullet arrays with strict chronological order. Use status icons: "
+                        "🟢 for Initial Allocation, 🟡 for Renewals, 🔵 for Reallocations/Harmonization, and 🔴 for Expired. "
+                        "Include Cost, total MHz, duration, and FDD/TDD modes for every step. Output ONLY the mapping text summary."
                     )
 
                     response = llm.invoke(f"{system_prompt}\n\nRegistry Data Target Context:\n{raw_log}")
@@ -108,6 +99,5 @@ if active_df is not None:
 
                 except Exception as e:
                     st.error(f"Execution Error: {str(e)}")
-                    
 else:
     st.error("❌ No data source detected. Ensure 'gsma_spectrum_mock_registry.xlsx' is placed in your project directory or upload it above.")
