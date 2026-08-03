@@ -82,25 +82,24 @@ if active_df is not None:
                     # Instantiating current fast inference model
                     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
 
-                    system_prompt = (
+                system_prompt = (
                         "You are an expert global telecommunications forensic data auditor at GSMA.\n\n"
                         "Your task is to take the provided filtered spectrum registry logs and synthesize them into a clean, "
                         "highly professional corporate asset lineage timeline. Group your analysis strictly into generational technology eras "
-                        "(e.g., '2G Spectrum', '3G Spectrum', '4G Spectrum', '5G Spectrum').\n\n"
-                        "For each era section, create a clean chronological bulleted list tracking the asset. Format each bullet point exactly like this:\n"
-                        "• [Status Icon] [Start Year]-[End Year]: [Current Operating Brand Name] ([Original Legacy Code]) - [Tech Layer Description] ([Total MHz] MHz, [FDD/TDD Mode]) - Cost: [Clean Price String or 'Not Disclosed'] - Region: [Circle Name]\n\n"
-                        "Use these explicit status icons based on asset phase transitions:\n"
-                        "🟢 for Initial Allocation\n"
-                        "🟡 for Renewals\n"
-                        "🔵 for Reallocations/Harmonization/Refarming\n"
-                        "🔴 for Expired/Operational Cease\n\n"
+                        "(e.g., '### 2G Spectrum', '### 3G Spectrum', '### 4G Spectrum', '### 5G Spectrum').\n\n"
                         "CRITICAL STRUCTURAL INSTRUCTIONS:\n"
-                        "1. Convert exact dates into clean years (e.g., '2001-11-15' to '2001').\n"
-                        "2. Smooth out corporate transitions semantically. Explain how brands evolved (e.g., BPL to Loop to Airtel, or Hutchison to Vodafone to Vi).\n"
-                        "3. Clean up missing values: If a cost is 'NaN', do not print 'NaN'; write it as 'Not Disclosed' or 'N/A'.\n"
-                        "4. Output ONLY the clean markdown headers and the formatted bullet lists. Do not write introductory text, conversational notes, or code wrappers."
+                        "1. Every single event MUST be printed on its own brand new line. Never pack multiple events into a single line or paragraph.\n"
+                        "2. Format each entry as a proper markdown bullet point exactly like this:\n"
+                        "   * [Status Icon] [Start Year]-[End Year]: [Current Operating Brand Name] ([Original Legacy Code]) - [Tech Layer Description] ([Total MHz] MHz, [FDD/TDD Mode]) - Cost: [Clean Price String or 'Not Disclosed'] - Region: [Circle Name]\n"
+                        "3. Use these explicit status icons based on asset phase transitions:\n"
+                        "   🟢 for Initial Allocation\n"
+                        "   🟡 for Renewals\n"
+                        "   🔵 for Reallocations/Harmonization/Refarming\n"
+                        "   🔴 for Expired/Operational Cease\n\n"
+                        "4. Convert exact timestamps into clean years (e.g., '2001-09-10' becomes '2001').\n"
+                        "5. If a value or cost is 'NaN' or missing, write it cleanly as 'Not Disclosed' or 'N/A'. Do not print raw 'NaN'.\n"
+                        "6. Output ONLY the clean markdown section headers and the line-by-line formatted bullet lists. Do not wrap code blocks or include extra greeting/intro text."
                     )
-
                     response = llm.invoke(f"{system_prompt}\n\nRegistry Data Target Context:\n{raw_log}")
                     st.success("✨ Relationship Trace Chain Complete!")
                     st.markdown("### 🗺️ Linked Asset Relationship Timeline")
