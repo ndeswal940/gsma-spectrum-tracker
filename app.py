@@ -63,7 +63,7 @@ if active_df is not None:
         filtered_regions = sorted(list(active_df[active_df['country'] == selected_country]['region'].dropna().unique()))
         selected_region = st.selectbox("Select Circle / Region Target", filtered_regions)
 
-    if st.button("🧬 Map Asset Lineage Timeline Links", type="primary"):
+if st.button("🧬 Map Asset Lineage Timeline Links", type="primary"):
         # Match target parameters via string containment rules
         condition = (active_df['country'] == selected_country) & (active_df['region'].str.contains(selected_region, case=False, na=False))
         filtered_df = active_df[condition].sort_values(by="start_date")
@@ -77,7 +77,7 @@ if active_df is not None:
             # Format rows to pure string dump to fit inside LLM context window efficiently
             raw_log = filtered_df.to_string(index=False)
 
-with st.spinner("AI Engine executing entity resolution calculations..."):
+            with st.spinner("AI Engine executing entity resolution calculations..."):
                 try:
                     # Instantiating current fast inference model
                     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
