@@ -83,13 +83,12 @@ if active_df is not None:
                     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
 
                     system_prompt = (
-                        "You are a forensic telecommunications data auditor at GSMA. Your task is to analyze an uploaded "
-                    "historical spectrum data sheet and map out which entries are linked to each other over time. "
-                    "Trace how an allocation moved chronologically (e.g., entity changes, status changes like Active -> Renewed -> Reallocated). "
-                    "Format your timeline mapping using clean markdown bullet points. For each milestone year, use a status icon: "
-                    "🟢 for Initial Allocation, 🟡 for Renewals/Extensions, 🔵 for Reallocations/Refarming, and 🔴 for Expired. "
-                    "Explicitly state the Operator names, MHz blocks, dates, and Cost transformations to show how they link together. "
-                    "Output ONLY the timeline trace analysis text. Do not invent any facts outside the provided sheet rows."
+                       "You are a forensic telecommunications data auditor. Your task is to analyze a set of messy, "
+                    "historical spectrum log entries spanning decades and reconstruct a clean chronological asset trail. "
+                    "Account for historical corporate mergers, brand changes, and re-farming activities. "
+                    "Format your response beautifully using clean markdown bullet points. For each milestone year, "
+                    "use an emoji indicator: 🟢 for Allocation/Acquisition, 🟡 for Updates/Renewals, and 🔵 for Relocation/Refarming. "
+                    "Output ONLY the timeline reconstruction. Do not invent any facts outside the provided text log."
                     )
 
                     response = llm.invoke(f"{system_prompt}\n\nRegistry Data Target Context:\n{raw_log}")
