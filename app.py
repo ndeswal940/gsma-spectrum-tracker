@@ -77,12 +77,12 @@ if active_df is not None:
             # Format rows to pure string dump to fit inside LLM context window efficiently
             raw_log = filtered_df.to_string(index=False)
 
-            with st.spinner("AI Engine executing entity resolution calculations..."):
+with st.spinner("AI Engine executing entity resolution calculations..."):
                 try:
                     # Instantiating current fast inference model
                     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
 
-                 system_prompt = (
+                    system_prompt = (
                         "You are an expert global telecommunications forensic data auditor at GSMA.\n\n"
                         "Your task is to take the provided filtered spectrum registry logs and synthesize them into a clean, "
                         "highly professional corporate asset lineage timeline. Group your analysis strictly into generational technology eras "
