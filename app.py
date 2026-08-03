@@ -63,7 +63,7 @@ if active_df is not None:
         filtered_regions = sorted(list(active_df[active_df['country'] == selected_country]['region'].dropna().unique()))
         selected_region = st.selectbox("Select Circle / Region Target", filtered_regions)
 
-if st.button("🧬 Map Asset Lineage Timeline Links", type="primary"):
+    if st.button("🧬 Map Asset Lineage Timeline Links", type="primary"):
         # Match target parameters via string containment rules
         condition = (active_df['country'] == selected_country) & (active_df['region'].str.contains(selected_region, case=False, na=False))
         filtered_df = active_df[condition].sort_values(by="start_date")
@@ -106,7 +106,7 @@ if st.button("🧬 Map Asset Lineage Timeline Links", type="primary"):
                     response = llm.invoke(f"{system_prompt}\n\nRegistry Data Target Context:\n{raw_log}")
                     st.success("✨ Relationship Trace Chain Complete!")
                     st.markdown("### 🗺️ Linked Asset Relationship Timeline")
-                    st.info(response.content)
+                    st.markdown(response.content)
 
                 except Exception as e:
                     st.error(f"Execution Error: {str(e)}")
