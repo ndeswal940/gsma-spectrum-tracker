@@ -77,6 +77,18 @@ if active_df is not None:
             # Format rows to pure string dump to fit inside LLM context window efficiently
             raw_log = filtered_df.to_string(index=False)
 
+            # 🛠️ NATIVE ONSCREEN LIFECYCLE LEGEND FOR PANEL REFERENCE
+            st.markdown("---")
+            st.markdown("### 🗺️ Linked Asset Relationship Timeline")
+            
+            st.markdown("""
+            > **📌 Asset Lifecycle Phase Legend:**
+            > * 🟢 **Initial Allocation:** The initial block grant or primary market entry.
+            > * 🟡 **Renewals:** Regulatory runtime extensions and operational license rollovers.
+            > * 🔵 **Reallocations / Harmonization / Refarming:** Structural frequency shifts or spectrum reorganizations.
+            > * 🔴 **Expired / Operational Cease:** License termination, spectrum handbacks, or network decommissioning.
+            """)
+
             with st.spinner("AI Engine executing entity resolution calculations..."):
                 try:
                     # Instantiating current fast inference model
@@ -105,7 +117,6 @@ if active_df is not None:
 
                     response = llm.invoke(f"{system_prompt}\n\nRegistry Data Target Context:\n{raw_log}")
                     st.success("✨ Relationship Trace Chain Complete!")
-                    st.markdown("### 🗺️ Linked Asset Relationship Timeline")
                     st.markdown(response.content)
 
                 except Exception as e:
