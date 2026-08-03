@@ -77,12 +77,12 @@ if active_df is not None:
             # Format rows to pure string dump to fit inside LLM context window efficiently
             raw_log = filtered_df.to_string(index=False)
 
-            with st.spinner("AI Engine executing entity resolution calculations..."):
+           with st.spinner("AI Engine executing entity resolution calculations..."):
                 try:
                     # Instantiating current fast inference model
                     llm = ChatGroq(model_name="llama-3.1-8b-instant", temperature=0.0)
 
-                system_prompt = (
+                    system_prompt = (
                         "You are an expert global telecommunications forensic data auditor at GSMA.\n\n"
                         "Your task is to take the provided filtered spectrum registry logs and synthesize them into a clean, "
                         "highly professional corporate asset lineage timeline. Group your analysis strictly into generational technology eras "
@@ -100,6 +100,7 @@ if active_df is not None:
                         "5. If a value or cost is 'NaN' or missing, write it cleanly as 'Not Disclosed' or 'N/A'. Do not print raw 'NaN'.\n"
                         "6. Output ONLY the clean markdown section headers and the line-by-line formatted bullet lists. Do not wrap code blocks or include extra greeting/intro text."
                     )
+
                     response = llm.invoke(f"{system_prompt}\n\nRegistry Data Target Context:\n{raw_log}")
                     st.success("✨ Relationship Trace Chain Complete!")
                     st.markdown("### 🗺️ Linked Asset Relationship Timeline")
@@ -107,5 +108,6 @@ if active_df is not None:
 
                 except Exception as e:
                     st.error(f"Execution Error: {str(e)}")
+                    
 else:
     st.error("❌ No data source detected. Ensure 'gsma_spectrum_mock_registry.xlsx' is placed in your project directory or upload it above.")
