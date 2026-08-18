@@ -92,8 +92,10 @@ if active_df is not None:
             with st.spinner("AI Engine executing entity resolution calculations..."):
                 try:
                     # Instantiating current fast inference model
-                    llm = ChatGroq(model_name="llama3-8b-8192", temperature=0.0)
-
+                   llm = ChatGroq(
+    model_name="openai/gpt-oss-120b",
+    temperature=0.0
+)
                     system_prompt = (
                         "You are an expert global telecommunications forensic data auditor at GSMA.\n\n"
                         "Your task is to take the provided filtered spectrum registry logs and synthesize them into a clean, "
