@@ -89,10 +89,11 @@ if active_df is not None:
             > * 🔴 **Expired / Operational Cease:** License termination, spectrum handbacks, or network decommissioning.
             """)
 
-            with st.spinner("AI Engine executing entity resolution calculations..."):
+with st.spinner("AI Engine executing entity resolution calculations..."):
                 try:
-                    # Instantiating current fast inference model
-                   llm = ChatGroq( model_name="openai/gpt-oss-120b",temperature=0.0)
+                    # Instantiating active replacement inference model
+                    llm = ChatGroq(model_name="openai/gpt-oss-120b", temperature=0.0)
+
                     system_prompt = (
                         "You are an expert global telecommunications forensic data auditor at GSMA.\n\n"
                         "Your task is to take the provided filtered spectrum registry logs and synthesize them into a clean, "
@@ -120,5 +121,3 @@ if active_df is not None:
 
                 except Exception as e:
                     st.error(f"Execution Error: {str(e)}")
-else:
-    st.error("❌ No data source detected. Ensure 'gsma_spectrum_mock_registry.xlsx' is placed in your project directory or upload it above.")
